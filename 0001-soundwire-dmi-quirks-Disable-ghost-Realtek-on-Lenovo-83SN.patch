@@ -1,0 +1,22 @@
+From 21f4552fbaafa75628ed7bf7693303920da0545c Mon Sep 17 00:00:00 2001
+From: Bard Liao <yung-chuan.liao@linux.intel.com>
+Subject: soundwire: dmi-quirks: Disable ghost Realtek on Lenovo Yoga 7 Pro
+
+Backport of upstream commit 21f4552fbaaf (vkoul/soundwire next).
+
+--- a/dmi-quirks.c
++++ b/dmi-quirks.c
+@@ -224,6 +224,13 @@
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "83SN"),
++		},
++		.driver_data = (void *)ghost_realtek,
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "83QK"),
+ 		},
+ 		.driver_data = (void *)ghost_realtek,
