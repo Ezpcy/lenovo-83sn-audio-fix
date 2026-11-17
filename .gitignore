@@ -6,3 +6,4 @@
 !0001-soundwire-dmi-quirks-Disable-ghost-Realtek-on-Lenovo-83SN.patch
 !README.md
 !LICENSE
+!0002-sof-soundwire-enable-rt1320-amp-with-the-Speaker-device.patch

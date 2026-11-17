@@ -8,7 +8,7 @@ One PKGBUILD builds two packages; install both:
 | Package | Fixes | Upstream | Obsolete once |
 |---|---|---|---|
 | `soundwire-83sn-quirk-dkms` | SoundWire reports a ghost RT722 codec, so the audio card does not come up | [`21f4552fbaaf`](https://github.com/thesofproject/sof/issues/11207) "soundwire: dmi-quirks: Disable ghost Realtek on Lenovo Yoga 7 Pro" | You run kernel 7.4 or newer |
-| `alsa-ucm-conf-83sn` | UCM profile for the rt721 + rt1320 speaker split | alsa-ucm-conf `ba372ade34` (snapshot at `d260eed`) | alsa-ucm-conf newer than 1.2.16.1 is in the repos |
+| `alsa-ucm-conf-83sn` | UCM profile for the rt721 + rt1320 speaker split, plus a local fix that actually switches the rt1320 amp on (without it only half the speakers play) | alsa-ucm-conf `ba372ade34` (snapshot at `d260eed`); amp fix not upstream yet | alsa-ucm-conf newer than 1.2.16.1 is in the repos **and** contains the amp fix |
 
 ## Check your model
 
@@ -48,6 +48,25 @@ the in-kernel fix takes over.
 
 Because the bundled sources replace the in-kernel SoundWire modules, a SoundWire fix in
 a later 7.2.x/7.3.x stable release is only picked up once the bundled version is bumped.
+
+## Troubleshooting
+
+**No internal speakers after an update.** Check that DKMS actually ran:
+
+```sh
+grep -i 'permission denied' /var/log/pacman.log | tail   # e.g. blocked by AppArmor
+dkms status soundwire-83sn-quirk
+```
+
+If the build was skipped, run `sudo dkms autoinstall` and reboot.
+
+**Speakers sound thin or tinny.** Only the rt721 speakers are playing. Check the rt1320 amp:
+
+```sh
+amixer -c sofsoundwire cget name='rt1320-1 OT23 L Switch'   # should be on while playing
+```
+
+The `0002` patch fixes this in the UCM profile.
 
 ## Uninstall
 

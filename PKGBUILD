@@ -4,12 +4,13 @@
 #  - soundwire-83sn-quirk-dkms: backport of the SoundWire ghost-RT722 quirk
 #    (upstream 21f4552fbaaf), needed on 7.2/7.3 kernels; upstream from 7.4 on.
 #  - alsa-ucm-conf-83sn: alsa-ucm-conf snapshot with the rt721+rt1320 speaker
-#    split (upstream ba372ade34), needed until alsa-ucm-conf > 1.2.16.1.
+#    split (upstream ba372ade34), needed until alsa-ucm-conf > 1.2.16.1, plus a
+#    local fix so the rt1320 amp is actually enabled with the Speaker device.
 # Each one can be dropped on its own once the fix reaches the official packages.
 pkgbase=lenovo-83sn-audio-fix
 pkgname=(soundwire-83sn-quirk-dkms alsa-ucm-conf-83sn)
 pkgver=1
-pkgrel=1
+pkgrel=2
 arch=("any")
 url="https://github.com/thesofproject/sof/issues/11207"
 license=("GPL-2.0-only" "BSD-3-Clause")
@@ -19,6 +20,7 @@ _k73=7.3
 _ucmver=1.2.16.1
 _ucmcommit=d260eedd1900dbf3b477047e048d5382a5f50e24
 _patch=0001-soundwire-dmi-quirks-Disable-ghost-Realtek-on-Lenovo-83SN.patch
+_ucmpatch=0002-sof-soundwire-enable-rt1320-amp-with-the-Speaker-device.patch
 # Only drivers/soundwire is needed, so fetch those files instead of two full kernel tarballs
 _swfiles=(Kconfig Makefile amd_init.c amd_init.h amd_manager.c amd_manager.h bus.c bus.h
           bus_type.c cadence_master.c cadence_master.h debugfs.c dmi-quirks.c
@@ -29,7 +31,8 @@ _swfiles=(Kconfig Makefile amd_init.c amd_init.h amd_manager.c amd_manager.h bus
 _kgit=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/plain/drivers/soundwire
 source=("git+https://github.com/alsa-project/alsa-ucm-conf.git#commit=$_ucmcommit"
         "dkms.conf"
-        "$_patch")
+        "$_patch"
+        "$_ucmpatch")
 for _f in "${_swfiles[@]}"; do
   source+=("$_k72-$_f::$_kgit/$_f?h=v$_k72")
 done
@@ -39,6 +42,7 @@ done
 sha256sums=('03221e2f07fb06f28efa2184bfdb58e045961388fef4cfa3253ac01b50cba7c1'
             '8eb5c807c14ec13b18e6b9d5a470ab07a0995f9873f1a69d848334611a41bc44'
             '42110cc891cc830b4806868fa74428a468cfcf0d9e358b8291ebead85ae732af'
+            'ce407c394c188b6a372f23f9e89e5842ab948d7d5c70ebb8ee731ce7c41c20f9'
             '2380e9ef52616eee431edf7b4464886c79e840c0b4a4b552854e7116eb406714'
             'acd72cd33ad377051020654e61b0d66bd2c63787fe44699199938af48a3bbfd4'
             '131079c16825ed07a1c02a2952291b295ac5a1ae80e4fa97160d08146cb14b54'
@@ -115,6 +119,7 @@ prepare() {
     done
     patch -d "$series" -p1 --fuzz=0 --no-backup-if-mismatch < "$_patch"
   done
+  git -C alsa-ucm-conf apply --verbose "$srcdir/$_ucmpatch"
 }
 
 package_soundwire-83sn-quirk-dkms() {

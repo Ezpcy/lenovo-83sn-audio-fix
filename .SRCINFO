@@ -1,6 +1,6 @@
 pkgbase = lenovo-83sn-audio-fix
 	pkgver = 1
-	pkgrel = 1
+	pkgrel = 2
 	url = https://github.com/thesofproject/sof/issues/11207
 	arch = any
 	license = GPL-2.0-only
@@ -9,6 +9,7 @@ pkgbase = lenovo-83sn-audio-fix
 	source = git+https://github.com/alsa-project/alsa-ucm-conf.git#commit=d260eedd1900dbf3b477047e048d5382a5f50e24
 	source = dkms.conf
 	source = 0001-soundwire-dmi-quirks-Disable-ghost-Realtek-on-Lenovo-83SN.patch
+	source = 0002-sof-soundwire-enable-rt1320-amp-with-the-Speaker-device.patch
 	source = 7.2.11-Kconfig::https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/plain/drivers/soundwire/Kconfig?h=v7.2.11
 	source = 7.2.11-Makefile::https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/plain/drivers/soundwire/Makefile?h=v7.2.11
 	source = 7.2.11-amd_init.c::https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/plain/drivers/soundwire/amd_init.c?h=v7.2.11
@@ -76,6 +77,7 @@ pkgbase = lenovo-83sn-audio-fix
 	sha256sums = 03221e2f07fb06f28efa2184bfdb58e045961388fef4cfa3253ac01b50cba7c1
 	sha256sums = 8eb5c807c14ec13b18e6b9d5a470ab07a0995f9873f1a69d848334611a41bc44
 	sha256sums = 42110cc891cc830b4806868fa74428a468cfcf0d9e358b8291ebead85ae732af
+	sha256sums = ce407c394c188b6a372f23f9e89e5842ab948d7d5c70ebb8ee731ce7c41c20f9
 	sha256sums = 2380e9ef52616eee431edf7b4464886c79e840c0b4a4b552854e7116eb406714
 	sha256sums = acd72cd33ad377051020654e61b0d66bd2c63787fe44699199938af48a3bbfd4
 	sha256sums = 131079c16825ed07a1c02a2952291b295ac5a1ae80e4fa97160d08146cb14b54
